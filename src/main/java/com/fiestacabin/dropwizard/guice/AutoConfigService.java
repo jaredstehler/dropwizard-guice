@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.Provider;
 
+import com.yammer.dropwizard.lifecycle.Managed;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
@@ -44,9 +45,17 @@ public abstract class AutoConfigService<T extends Configuration> extends GuiceSe
 		addInjectableProviders(environment, injector);
 		addResources(environment, injector);
 		addTasks(environment, injector);
+		addManaged(environment, injector);
 	}
 
 
+    private void addManaged(Environment environment, Injector injector) {
+        Set<Class<? extends Managed>> managedClasses = reflections.getSubTypesOf(Managed.class);
+        for( Class<? extends Managed> managed : managedClasses) {
+            environment.manage(injector.getInstance(managed));
+            LOG.info("Added managed: " + managed);
+        }
+    }
 
 	private void addTasks(Environment environment, Injector injector) {
 		Set<Class<? extends Task>> taskClasses = reflections.getSubTypesOf(Task.class);
