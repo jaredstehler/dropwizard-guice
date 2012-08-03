@@ -29,14 +29,24 @@ public abstract class AutoConfigService<T extends Configuration> extends GuiceSe
 	private static final Log LOG = Log.forClass(AutoConfigService.class);
 	
 	private Reflections reflections;
-	
+    
 	protected AutoConfigService(String name, String basePackage) {
 		super(name);
 		this.reflections = new Reflections(basePackage, 
 				new SubTypesScanner(), new TypeAnnotationsScanner());
 	}
 
-	@Override
+    protected AutoConfigService(String basePackage) {
+        this(null, basePackage);
+    }
+
+    protected AutoConfigService() {
+        super(null);
+        this.reflections = new Reflections(getClass().getPackage().getName(), 
+                new SubTypesScanner(), new TypeAnnotationsScanner());
+    }
+
+    @Override
 	protected void initializeWithInjector(T configuration,
 			Environment environment, Injector injector) throws Exception {
 
