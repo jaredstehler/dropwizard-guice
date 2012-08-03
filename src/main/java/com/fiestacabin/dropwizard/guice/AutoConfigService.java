@@ -40,6 +40,12 @@ public abstract class AutoConfigService<T extends Configuration> extends GuiceSe
         this(null, basePackage);
     }
 
+    protected AutoConfigService() {
+        super(null);
+        this.reflections = new Reflections(getClass().getPackage().getName(), 
+                new SubTypesScanner(), new TypeAnnotationsScanner());
+    }
+
     @Override
 	protected void initializeWithInjector(T configuration,
 			Environment environment, Injector injector) throws Exception {
