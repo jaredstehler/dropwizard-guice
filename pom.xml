@@ -3,6 +3,7 @@
   <groupId>com.fiestacabin.dropwizard.guice</groupId>
   <artifactId>dropwizard-guice</artifactId>
   <version>0.5.1</version>
+  <packaging>jar</packaging>
   
   <name>Guice Extensions for Dropwizard</name>
   <description>Simple library for using Guice DI in a dropwizard app.</description>
@@ -18,7 +19,16 @@
   
   <scm>
     <url>https://github.com/jaredstehler/dropwizard-guice</url>
+    <connection>https://github.com/jaredstehler/dropwizard-guice</connection>
   </scm>
+
+  <developers>
+    <developer>
+      <id>jaredstehler</id>
+      <name>Jared Stehler</name>
+      <email>jared.stehler@gmail.com</email>
+    </developer>
+  </developers>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
