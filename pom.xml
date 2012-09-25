@@ -2,16 +2,31 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.fiestacabin.dropwizard.guice</groupId>
   <artifactId>dropwizard-guice</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>Guice Extensions for Dropwizard</name>
+  <version>0.5.1</version>
   
+  <name>Guice Extensions for Dropwizard</name>
+  <description>Simple library for using Guice DI in a dropwizard app.</description>
+  <url>https://github.com/jaredstehler/dropwizard-guice</url>
+  
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  
+  <scm>
+    <url>https://github.com/jaredstehler/dropwizard-guice</url>
+  </scm>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <build>
-  	<plugins>
-  		<plugin>
+    <plugins>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.5</version>
@@ -21,7 +36,7 @@
           <target>1.6</target>
         </configuration>
       </plugin>
-  	</plugins>
+    </plugins>
   </build>
   
   <dependencies>
