@@ -2,8 +2,14 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.fiestacabin.dropwizard.guice</groupId>
   <artifactId>dropwizard-guice</artifactId>
-  <version>0.5.1</version>
+  <version>0.5.1-SNAPSHOT</version>
   <packaging>jar</packaging>
+  
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
   
   <name>Guice Extensions for Dropwizard</name>
   <description>Simple library for using Guice DI in a dropwizard app.</description>
@@ -18,8 +24,9 @@
   </licenses>
   
   <scm>
-    <url>https://github.com/jaredstehler/dropwizard-guice</url>
-    <connection>https://github.com/jaredstehler/dropwizard-guice</connection>
+    <connection>scm:git:git@github.com:jaredstehler/dropwizard-guice.git</connection>
+    <developerConnection>scm:git:git@github.com:jaredstehler/dropwizard-guice.git</developerConnection>
+    <url>git@github.com:jaredstehler/dropwizard-guice.git</url>
   </scm>
 
   <developers>
@@ -45,6 +52,20 @@
           <source>1.6</source>
           <target>1.6</target>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
