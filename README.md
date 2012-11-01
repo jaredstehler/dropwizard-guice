@@ -9,3 +9,11 @@ It's simple to use; simple extend from AutoConfigService<? extends Configuration
 
 See the test classes located within src/test/java/com/fiestacabin/dropwizard/guice/test for an example.
 
+This library is available on the public maven repository:
+
+    <dependency>
+        <groupId>com.fiestacabin.dropwizard.guice</groupId>
+        <artifactId>dropwizard-guice</artifactId>
+        <version>0.5.1</version>
+    </dependency>
+    
