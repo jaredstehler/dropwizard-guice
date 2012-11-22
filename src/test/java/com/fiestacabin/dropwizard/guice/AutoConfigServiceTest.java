@@ -4,7 +4,16 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +21,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.fiestacabin.dropwizard.common.resources.CommonResource;
+import com.fiestacabin.dropwizard.guice.test.MultiPackageService;
 import com.fiestacabin.dropwizard.guice.test.SampleService;
 import com.fiestacabin.dropwizard.guice.test.SampleServiceConfiguration;
 import com.fiestacabin.dropwizard.guice.test.health.MyHealthCheck;
@@ -40,6 +51,28 @@ public class AutoConfigServiceTest {
 		ArgumentCaptor<MyResource> resource = ArgumentCaptor.forClass(MyResource.class);
 		verify(environment).addResource(resource.capture());
 		assertThat(resource.getValue(), is(MyResource.class));
+	}
+	
+	@Test
+	public void itInstallsMultiPackageResources() throws Exception {
+		MultiPackageService s = new MultiPackageService();
+		s.initializeWithBundles(configuration, environment);
+		
+		ArgumentCaptor<?> captor = ArgumentCaptor.forClass(Object.class);
+		verify(environment, times(2)).addResource(captor.capture());
+		
+		List<?> values = captor.getAllValues();
+		assertEquals(2, values.size());
+		
+		Set<Class<?>> expectedResults = new HashSet<Class<?>>();
+	  expectedResults.add(MyResource.class);
+	  expectedResults.add(CommonResource.class);
+	  for(Object obj : values){
+	    Class<?> cls = obj.getClass();
+	    expectedResults.remove(cls);
+	  }
+	  
+	  assertTrue(expectedResults.isEmpty());
 	}
 	
 	@Test

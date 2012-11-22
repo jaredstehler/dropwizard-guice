@@ -9,6 +9,9 @@ import com.yammer.dropwizard.lifecycle.Managed;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 
 import com.google.inject.Injector;
 import com.sun.jersey.spi.inject.InjectableProvider;
@@ -30,10 +33,19 @@ public abstract class AutoConfigService<T extends Configuration> extends GuiceSe
 	
 	private Reflections reflections;
     
-	protected AutoConfigService(String name, String basePackage) {
+	protected AutoConfigService(String name, String ... basePackages) {
 		super(name);
-		this.reflections = new Reflections(basePackage, 
-				new SubTypesScanner(), new TypeAnnotationsScanner());
+
+		ConfigurationBuilder cfgBldr = new ConfigurationBuilder();
+    FilterBuilder filterBuilder = new FilterBuilder();
+    for(String basePkg : basePackages){
+      cfgBldr.addUrls( ClasspathHelper.forPackage(basePkg) );
+      filterBuilder.include( FilterBuilder.prefix(basePkg) );
+    }
+      
+    cfgBldr.filterInputsBy(filterBuilder)
+           .setScanners(new SubTypesScanner(), new TypeAnnotationsScanner());
+    this.reflections = new Reflections(cfgBldr);
 	}
 
     protected AutoConfigService(String basePackage) {
