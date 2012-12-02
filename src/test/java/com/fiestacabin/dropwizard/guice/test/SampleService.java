@@ -17,10 +17,10 @@ public class SampleService extends AutoConfigService<SampleServiceConfiguration>
 	}
 	
 	@Override
-	protected void initializeWithInjector(
+	protected void runWithInjector(
 			SampleServiceConfiguration configuration, Environment environment,
 			Injector injector) throws Exception {
-		super.initializeWithInjector(configuration, environment, injector);
+		super.runWithInjector(configuration, environment, injector);
 	}
 	
 }

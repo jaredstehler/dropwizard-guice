@@ -3,11 +3,9 @@ package com.fiestacabin.dropwizard.guice;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -46,7 +44,7 @@ public class AutoConfigServiceTest {
 	@Test
 	public void itInstallsResources() throws Exception {
 		SampleService s = new SampleService();
-		s.initializeWithBundles(configuration, environment);
+		s.run(configuration, environment);
 		
 		ArgumentCaptor<MyResource> resource = ArgumentCaptor.forClass(MyResource.class);
 		verify(environment).addResource(resource.capture());
@@ -56,7 +54,7 @@ public class AutoConfigServiceTest {
 	@Test
 	public void itInstallsMultiPackageResources() throws Exception {
 		MultiPackageService s = new MultiPackageService();
-		s.initializeWithBundles(configuration, environment);
+		s.run(configuration, environment);
 		
 		ArgumentCaptor<?> captor = ArgumentCaptor.forClass(Object.class);
 		verify(environment, times(2)).addResource(captor.capture());
@@ -78,7 +76,7 @@ public class AutoConfigServiceTest {
 	@Test
 	public void itWiresUpDependencies() throws Exception {
 		SampleService s = new SampleService();
-		s.initializeWithBundles(configuration, environment);
+		s.run(configuration, environment);
 		
 		ArgumentCaptor<MyResource> resource = ArgumentCaptor.forClass(MyResource.class);
 		verify(environment).addResource(resource.capture());
@@ -91,7 +89,7 @@ public class AutoConfigServiceTest {
 	@Test
 	public void itInstallsHealthChecks() throws Exception {
 		SampleService s = new SampleService();
-		s.initializeWithBundles(configuration, environment);
+		s.run(configuration, environment);
 
 		ArgumentCaptor<? extends HealthCheck> healthCheck = ArgumentCaptor.forClass(HealthCheck.class);
 		verify(environment).addHealthCheck(healthCheck.capture());
@@ -101,7 +99,7 @@ public class AutoConfigServiceTest {
 	@Test
 	public void itInstallsTasks() throws Exception {
 		SampleService s = new SampleService();
-		s.initializeWithBundles(configuration, environment);
+		s.run(configuration, environment);
 		
 		ArgumentCaptor<? extends Task> task = ArgumentCaptor.forClass(Task.class);
 		verify(environment).addTask(task.capture());
