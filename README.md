@@ -14,6 +14,6 @@ This library is available on the public maven repository:
     <dependency>
         <groupId>com.fiestacabin.dropwizard.guice</groupId>
         <artifactId>dropwizard-guice</artifactId>
-        <version>0.6.1</version>
+        <version>0.6.2</version>
     </dependency>
     
