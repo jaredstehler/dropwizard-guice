@@ -1,4 +1,4 @@
-Dropwizard-Guice
+Dropwizard-Guice [![Build Status](https://travis-ci.org/jaredstehler/dropwizard-guice.svg)](https://travis-ci.org/jaredstehler/dropwizard-guice)
 ================
 
 This project demonstrates a simple method for integrating Guice with Dropwizard. It uses classpath scanning courtesy of the Reflections project to discover resources to install into the dropwizard environment upon service start.
