@@ -1,11 +1,15 @@
 package com.fiestacabin.dropwizard.guice;
 
+import io.dropwizard.Configuration;
+import io.dropwizard.lifecycle.Managed;
+import io.dropwizard.servlets.tasks.Task;
+import io.dropwizard.setup.Environment;
+
 import java.util.Set;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.Provider;
 
-import com.yammer.dropwizard.lifecycle.Managed;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
@@ -15,31 +19,31 @@ import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.codahale.metrics.health.HealthCheck;
 import com.google.inject.Injector;
 import com.sun.jersey.spi.inject.InjectableProvider;
-import com.yammer.dropwizard.config.Configuration;
-import com.yammer.dropwizard.config.Environment;
-import com.yammer.dropwizard.tasks.Task;
-import com.yammer.metrics.core.HealthCheck;
 
 /**
- * Service which automatically adds items to the service environment, including
+ * Application class which automatically adds items to the application environment, including
  * health checks, resources
  * 
  * @author jstehler
  * 
  */
-public abstract class AutoConfigService<T extends Configuration> extends
-		GuiceService<T> {
-	private static final Logger LOG = LoggerFactory.getLogger(AutoConfigService.class);
+public abstract class AutoConfigApplication<T extends Configuration> extends
+		GuiceApplication<T> {
+	private static final Logger LOG = LoggerFactory.getLogger(AutoConfigApplication.class);
 
 	private Reflections reflections;
 
-	protected AutoConfigService(String name, String... basePackages) {
-		super(name);
-
+	protected AutoConfigApplication(String... basePackages) {
 		ConfigurationBuilder cfgBldr = new ConfigurationBuilder();
 		FilterBuilder filterBuilder = new FilterBuilder();
+		
+		if(basePackages.length == 0) {
+		  basePackages = new String[]{getClass().getPackage().getName()};
+		}
+		
 		for (String basePkg : basePackages) {
 			cfgBldr.addUrls(ClasspathHelper.forPackage(basePkg));
 			filterBuilder.include(FilterBuilder.prefix(basePkg));
@@ -48,16 +52,6 @@ public abstract class AutoConfigService<T extends Configuration> extends
 		cfgBldr.filterInputsBy(filterBuilder).setScanners(
 				new SubTypesScanner(), new TypeAnnotationsScanner());
 		this.reflections = new Reflections(cfgBldr);
-	}
-
-	protected AutoConfigService(String basePackage) {
-		this(null, basePackage);
-	}
-
-	protected AutoConfigService() {
-		super(null);
-		this.reflections = new Reflections(getClass().getPackage().getName(),
-				new SubTypesScanner(), new TypeAnnotationsScanner());
 	}
 
 	@Override
@@ -76,7 +70,7 @@ public abstract class AutoConfigService<T extends Configuration> extends
 		Set<Class<? extends Managed>> managedClasses = reflections
 				.getSubTypesOf(Managed.class);
 		for (Class<? extends Managed> managed : managedClasses) {
-			environment.manage(injector.getInstance(managed));
+			environment.lifecycle().manage(injector.getInstance(managed));
 			LOG.info("Added managed: " + managed);
 		}
 	}
@@ -85,7 +79,7 @@ public abstract class AutoConfigService<T extends Configuration> extends
 		Set<Class<? extends Task>> taskClasses = reflections
 				.getSubTypesOf(Task.class);
 		for (Class<? extends Task> task : taskClasses) {
-			environment.addTask(injector.getInstance(task));
+			environment.admin().addTask(injector.getInstance(task));
 			LOG.info("Added task: " + task);
 		}
 	}
@@ -94,7 +88,7 @@ public abstract class AutoConfigService<T extends Configuration> extends
 		Set<Class<? extends HealthCheck>> healthCheckClasses = reflections
 				.getSubTypesOf(HealthCheck.class);
 		for (Class<? extends HealthCheck> healthCheck : healthCheckClasses) {
-			environment.addHealthCheck(injector.getInstance(healthCheck));
+			environment.healthChecks().register(healthCheck.getSimpleName(), injector.getInstance(healthCheck));
 			LOG.info("Added healthCheck: " + healthCheck);
 		}
 	}
@@ -105,7 +99,7 @@ public abstract class AutoConfigService<T extends Configuration> extends
 		Set<Class<? extends InjectableProvider>> injectableProviders = reflections
 				.getSubTypesOf(InjectableProvider.class);
 		for (Class<? extends InjectableProvider> injectableProvider : injectableProviders) {
-			environment.addProvider(injector.getInstance(injectableProvider));
+			environment.jersey().register(injector.getInstance(injectableProvider));
 			LOG.info("Added injectableProvider: " + injectableProvider);
 		}
 	}
@@ -114,7 +108,7 @@ public abstract class AutoConfigService<T extends Configuration> extends
 		Set<Class<?>> providerClasses = reflections
 				.getTypesAnnotatedWith(Provider.class);
 		for (Class<?> provider : providerClasses) {
-			environment.addProvider(injector.getInstance(provider));
+			environment.jersey().register(injector.getInstance(provider));
 			LOG.info("Added provider class: " + provider);
 		}
 	}
@@ -123,7 +117,7 @@ public abstract class AutoConfigService<T extends Configuration> extends
 		Set<Class<?>> resourceClasses = reflections
 				.getTypesAnnotatedWith(Path.class);
 		for (Class<?> resource : resourceClasses) {
-			environment.addResource(injector.getInstance(resource));
+			environment.jersey().register(injector.getInstance(resource));
 			LOG.info("Added resource class: " + resource);
 		}
 	}

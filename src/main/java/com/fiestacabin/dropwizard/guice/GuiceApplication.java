@@ -1,26 +1,19 @@
 package com.fiestacabin.dropwizard.guice;
 
+import io.dropwizard.Application;
+import io.dropwizard.Configuration;
+import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.yammer.dropwizard.Service;
-import com.yammer.dropwizard.config.Bootstrap;
-import com.yammer.dropwizard.config.Configuration;
-import com.yammer.dropwizard.config.Environment;
 
-public abstract class GuiceService<T extends Configuration> extends Service<T> {
+public abstract class GuiceApplication<T extends Configuration> extends Application<T> {
 
-	private String name;
-	
-	protected GuiceService() {}
-	
-	protected GuiceService(String name) {
-		this.name = name;
-	}
+	protected GuiceApplication() {}
 
 	@Override
 	public void initialize(Bootstrap<T> bootstrap) {
-		if( name != null )
-			bootstrap.setName(name);
 	}
 	
 	@Override

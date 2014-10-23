@@ -1,14 +1,15 @@
 package com.fiestacabin.dropwizard.guice.test;
 
-import com.fiestacabin.dropwizard.guice.AutoConfigService;
+import io.dropwizard.setup.Environment;
+
+import com.fiestacabin.dropwizard.guice.AutoConfigApplication;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.yammer.dropwizard.config.Environment;
 
-public class SampleService extends AutoConfigService<SampleServiceConfiguration> {
+public class SampleApplication extends AutoConfigApplication<SampleServiceConfiguration> {
 
-	public SampleService() {
-		super("sample-service", "com.fiestacabin.dropwizard.guice.test");
+	public SampleApplication() {
+		super("com.fiestacabin.dropwizard.guice.test");
 	}
 	
 	@Override

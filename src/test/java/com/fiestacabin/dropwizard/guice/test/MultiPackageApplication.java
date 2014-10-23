@@ -1,18 +1,19 @@
 package com.fiestacabin.dropwizard.guice.test;
 
-import com.fiestacabin.dropwizard.guice.AutoConfigService;
+import io.dropwizard.setup.Environment;
+
+import com.fiestacabin.dropwizard.guice.AutoConfigApplication;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.yammer.dropwizard.config.Environment;
 
 /**
  * A test service that uses the varargs constructor for AutoConfigService
  * @author ggavares
  *
  */
-public class MultiPackageService extends AutoConfigService<SampleServiceConfiguration> {
+public class MultiPackageApplication extends AutoConfigApplication<SampleServiceConfiguration> {
   
-  public MultiPackageService() {
+  public MultiPackageApplication() {
     super("sample-service", "com.fiestacabin.dropwizard.guice.test", "com.fiestacabin.dropwizard.common.resources");
   }
   

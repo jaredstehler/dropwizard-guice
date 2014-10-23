@@ -1,9 +1,10 @@
 package com.fiestacabin.dropwizard.guice.test.tasks;
 
+import io.dropwizard.servlets.tasks.Task;
+
 import java.io.PrintWriter;
 
 import com.google.common.collect.ImmutableMultimap;
-import com.yammer.dropwizard.tasks.Task;
 
 public class MyTask extends Task {
 
