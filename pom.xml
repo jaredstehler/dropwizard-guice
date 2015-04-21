@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fiestacabin.dropwizard.guice</groupId>
 	<artifactId>dropwizard-guice</artifactId>
-	<version>0.7.2-SNAPSHOT</version>
+	<version>0.8.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<parent>
@@ -102,7 +102,7 @@
 		<dependency>
 			<groupId>io.dropwizard</groupId>
 			<artifactId>dropwizard-core</artifactId>
-			<version>0.7.1</version>
+			<version>0.8.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.reflections</groupId>

@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.Provider;
 
+import org.glassfish.hk2.api.InjectionResolver;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
@@ -21,7 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import com.codahale.metrics.health.HealthCheck;
 import com.google.inject.Injector;
-import com.sun.jersey.spi.inject.InjectableProvider;
 
 /**
  * Application class which automatically adds items to the application environment, including
@@ -96,9 +96,9 @@ public abstract class AutoConfigApplication<T extends Configuration> extends
 	@SuppressWarnings("rawtypes")
 	private void addInjectableProviders(Environment environment,
 			Injector injector) {
-		Set<Class<? extends InjectableProvider>> injectableProviders = reflections
-				.getSubTypesOf(InjectableProvider.class);
-		for (Class<? extends InjectableProvider> injectableProvider : injectableProviders) {
+	  Set<Class<? extends InjectionResolver>> injectionResolvers = reflections
+	      .getSubTypesOf(InjectionResolver.class);
+		for (Class<? extends InjectionResolver> injectableProvider : injectionResolvers) {
 			environment.jersey().register(injector.getInstance(injectableProvider));
 			LOG.info("Added injectableProvider: " + injectableProvider);
 		}
